@@ -5,7 +5,7 @@ from threading import Thread
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, ChatJoinRequestHandler, CommandHandler, ContextTypes
 
-# --- LOGGING (Debug ke liye) ---
+# --- LOGGING ---
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # --- RENDER PORT FIX ---
@@ -22,8 +22,8 @@ def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# --- CONFIGURATION ---
-BOT_TOKEN = "8151979678:AAHonAeiyFTgoKeZqok3OTG5Rc4jnVJRZYs"
+# --- CONFIGURATION (Naya Token Updated) ---
+BOT_TOKEN = "8151979678:AAFWTg45jDtob6dn6OqAN4qaPCN9ZLB922k"
 BUTTON_1_TEXT = "🔥 Premium Videos free"
 BUTTON_2_TEXT = "🎬 Free Videos"
 BUTTON_1_LINK = "https://t.me/+O27nU16V5VszYjg1"
@@ -36,27 +36,20 @@ WELCOME_TEXT = (
 
 # --- HANDLERS ---
 
-# 1. /start command ka jawab
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_name = update.effective_user.first_name
     msg = f"Hello {user_name}!\n\nMujhe apne channel mein Admin banayein, main Join Requests auto-accept kar loonga."
     await update.message.reply_text(msg)
 
-# 2. Join Request accept karne ka logic
 async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
-        # Request approve karna
         await update.chat_join_request.approve()
         user_id = update.chat_join_request.from_user.id
-
-        # Buttons setup
         keyboard = [
             [InlineKeyboardButton(BUTTON_1_TEXT, url=BUTTON_1_LINK)],
             [InlineKeyboardButton(BUTTON_2_TEXT, url=BUTTON_2_LINK)]
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-
-        # User ko DM bhejna
         await context.bot.send_message(
             chat_id=user_id,
             text=WELCOME_TEXT,
@@ -64,21 +57,15 @@ async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="Markdown"
         )
     except Exception as e:
-        print(f"Error in join_request: {e}")
+        print(f"Error: {e}")
 
-# --- MAIN START ---
 def main():
-    # Render ko zinda rakhne ke liye
     keep_alive()
-    
-    # Bot build
     application = ApplicationBuilder().token(BOT_TOKEN).build()
-    
-    # Handlers add karna
     application.add_handler(CommandHandler("start", start))
     application.add_handler(ChatJoinRequestHandler(join_request))
     
-    print("Bot is starting...")
+    print("Bot is starting with NEW TOKEN...")
     application.run_polling(drop_pending_updates=True)
 
 if __name__ == "__main__":
