@@ -21,7 +21,7 @@ def keep_alive():
 
 # --- CONFIGURATION ---
 BOT_TOKEN = "8151979678:AAFWTg45jDtob6dn6OqAN4qaPCN9ZLB922k"
-ADMIN_ID = 1936430807 # <--- Yahan apni asli Telegram ID daalein
+ADMIN_ID = 1936430807 # <--- Yahan apni asli ID daalein
 BUTTON_1_TEXT = "🔥 Premium Videos free"
 BUTTON_2_TEXT = "🎬 Free Videos"
 BUTTON_1_LINK = "https://t.me/+O27nU16V5VszYjg1"
@@ -50,22 +50,26 @@ def get_users():
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_name = update.effective_user.first_name
-    add_user(user_id) # User ko list mein add karein
+    add_user(user_id) # User save ho jayega
     
     bot_username = (await context.bot.get_me()).username
-    welcome_msg = f"👋 **Hello {user_name}!**\n\nMain ek **Auto Join Accept** bot hoon."
+    welcome_msg = (
+        f"👋 **Hello {user_name}!**\n\n"
+        "Main ek **Auto Join Accept** bot hoon. Mujhe apne Channel ya Group mein niche diye gaye buttons se add karein aur Admin banayein!"
+    )
     
     keyboard = [
         [InlineKeyboardButton("➕ Add to Channel", url=f"https://t.me/{bot_username}?startchannel=true")],
-        [InlineKeyboardButton("➕ Add to Group", url=f"https://t.me/{bot_username}?startgroup=true")]
+        [InlineKeyboardButton("➕ Add to Group", url=f"https://t.me/{bot_username}?startgroup=true")],
+        [InlineKeyboardButton("📢 Support Channel", url="https://t.me/KobraMethod")]
     ]
     await update.message.reply_text(text=welcome_msg, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
 
-# ADMIN COMMANDS
+# Admin Commands
 async def admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
         return
-    await update.message.reply_text("👑 **Admin Menu**\n\n/stats - Check Users\n/broadcast [msg] - Send msg to all")
+    await update.message.reply_text("👑 **Admin Menu**\n\n/stats - Check total users\n/broadcast [msg] - Message to all")
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
@@ -79,7 +83,7 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     msg_to_send = " ".join(context.args)
     if not msg_to_send:
-        await update.message.reply_text("❌ Please write a message: `/broadcast Hello`")
+        await update.message.reply_text("❌ Msg likhein: `/broadcast Hello`")
         return
 
     users = get_users()
@@ -92,17 +96,19 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
             pass
     await update.message.reply_text(f"✅ Broadcast sent to {count} users.")
 
-# JOIN REQUEST
+# Join Request Handler
 async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         user = update.chat_join_request.from_user
-        add_user(user.id) # Request bhejte hi user save
+        add_user(user.id) # Join request par bhi user ID save hogi
         await update.chat_join_request.approve()
         
-        keyboard = [[InlineKeyboardButton(BUTTON_1_TEXT, url=BUTTON_1_LINK)],
-                    [InlineKeyboardButton(BUTTON_2_TEXT, url=BUTTON_2_LINK)]]
-        
-        await context.bot.send_message(chat_id=user.id, text="✅ Request Accepted!", reply_markup=InlineKeyboardMarkup(keyboard))
+        welcome_text = "✅ **Request Accepted!**\n\nNeeche buttons se free content dekho 👇"
+        keyboard = [
+            [InlineKeyboardButton(BUTTON_1_TEXT, url=BUTTON_1_LINK)],
+            [InlineKeyboardButton(BUTTON_2_TEXT, url=BUTTON_2_LINK)]
+        ]
+        await context.bot.send_message(chat_id=user.id, text=welcome_text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode="Markdown")
     except Exception as e:
         print(f"Error: {e}")
 
