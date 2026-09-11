@@ -21,7 +21,7 @@ links_col = db['links']
 admins_col = db['admins']  # [CHANGED] Added admins collection for Multi-Admin system
 
 # --- CONFIGURATION ---
-BOT_TOKEN = "8151979678:AAFWTg45jDtob6dn6OqAN4qaPCN9ZLB922k"
+BOT_TOKEN = "8151979678:AAHjmJX5UFL1kfM4HYkEdPPLkTJ31GBUF64"
 ADMIN_ID = 1936430807  # Main Bot Owner ID
 
 # Ensure main owner is always present in the admins collection upon startup
