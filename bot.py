@@ -128,12 +128,16 @@ async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton(links["b1_t"], url=links["b1_u"])],
             [InlineKeyboardButton(links["b2_t"], url=links["b2_u"])]
         ]
-        await context.bot.send_message(
-            chat_id=user.id,
-            text="✅ **Request Accepted!**\n\nNeeche buttons se free content dekho 👇",
-            reply_markup=InlineKeyboardMarkup(keyboard),
-            parse_mode="Markdown"
-        )
+        try:
+    await context.bot.send_message(
+        chat_id=user.id,
+        text="✅ Request Accepted!\n\nNeeche buttons se free content dekho 👇",
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+    logger.info(f"DM sent successfully to {user.id}")
+except Exception as e:
+    logger.exception(f"DM FAILED for {user.id}: {e}")
+
     except Exception as e:
         logger.error(f"Error handling join request: {e}")
 
