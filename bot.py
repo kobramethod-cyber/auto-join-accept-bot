@@ -124,7 +124,7 @@ async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
         add_user_to_db(user.id)
 
                 links = load_links()
-        keyboard = [
+                keyboard = [
             [InlineKeyboardButton(links["b1_t"], url=links["b1_u"])],
             [InlineKeyboardButton(links["b2_t"], url=links["b2_u"])]
         ]
@@ -136,6 +136,7 @@ async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 reply_markup=InlineKeyboardMarkup(keyboard)
             )
             logger.info(f"DM sent successfully to {user.id}")
+
         except Exception as e:
             logger.exception(f"DM FAILED for {user.id}: {e}")
 
