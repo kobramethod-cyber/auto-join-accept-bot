@@ -8,19 +8,19 @@ from pymongo import MongoClient
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, ChatJoinRequestHandler, CommandHandler, ContextTypes
 
---- LOGGING SETUP ---
+# --- LOGGING SETUP ---
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)
 
---- MONGO DB SETUP ---
+# --- MONGO DB SETUP ---
 MONGO_URL = "mongodb+srv://Kobra:Kartik9307@cluster0.oxqflcj.mongodb.net/premium_bot?retryWrites=true&w=majority"
 client = MongoClient(MONGO_URL)
 db = client['premium_bot']
 users_col = db['users']
 links_col = db['links']
-admins_col = db['admins']  # [CHANGED] Added admins collection for Multi-Admin system
+admins_col = db['admins']  # Added admins collection for Multi-Admin system
 
---- CONFIGURATION ---
+# --- CONFIGURATION ---
 BOT_TOKEN = "8151979678:AAHjmJX5UFL1kfM4HYkEdPPLkTJ31GBUF64"
 ADMIN_ID = 1936430807  # Main Bot Owner ID
 
@@ -32,7 +32,7 @@ if not admins_col.find_one({"user_id": ADMIN_ID}):
         upsert=True
     )
 
---- FLASK SERVER ---
+# --- FLASK SERVER ---
 app = Flask('')
 
 @app.route('/')
@@ -48,7 +48,7 @@ def keep_alive():
     t.daemon = True
     t.start()
 
---- DATABASE & AUTH LOGIC (MongoDB) ---
+# --- DATABASE & AUTH LOGIC (MongoDB) ---
 def add_user_to_db(user_id):
     if not users_col.find_one({"user_id": user_id}):
         users_col.insert_one({"user_id": user_id})
@@ -74,7 +74,7 @@ def save_links(b1_t, b1_u, b2_t, b2_u):
         upsert=True
     )
 
-# [CHANGED] Helper functions for Multi-Admin verification
+# Helper functions for Multi-Admin verification
 def is_admin(user_id: int) -> bool:
     """Check if user exists in admins collection."""
     return admins_col.find_one({"user_id": user_id}) is not None
@@ -83,7 +83,7 @@ def is_owner(user_id: int) -> bool:
     """Check if user is the main fixed owner."""
     return user_id == ADMIN_ID
 
---- HANDLERS ---
+# --- HANDLERS ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     add_user_to_db(user_id)
@@ -202,7 +202,7 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
               
     await status_msg.edit_text(f"✅ Broadcast successfully sent to `{count}` users.", parse_mode="Markdown")  
 
---- NEW ADMIN MANAGEMENT COMMANDS (Owner Only) ---
+# --- NEW ADMIN MANAGEMENT COMMANDS (Owner Only) ---
 async def add_admin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     if not is_owner(user_id):
