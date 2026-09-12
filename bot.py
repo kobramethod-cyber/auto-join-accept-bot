@@ -128,7 +128,7 @@ async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton(links["b1_t"], url=links["b1_u"])],
             [InlineKeyboardButton(links["b2_t"], url=links["b2_u"])]
         ]
-        try:
+    try:
     await context.bot.send_message(
         chat_id=user.id,
         text="✅ Request Accepted!\n\nNeeche buttons se free content dekho 👇",
