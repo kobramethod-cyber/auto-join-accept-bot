@@ -115,6 +115,7 @@ async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
       queue when the bot restarts are processed immediately.
     """
     async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         query = update.chat_join_request
         if not query:
