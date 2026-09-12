@@ -123,8 +123,8 @@ async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.approve()
         add_user_to_db(user.id)
 
-        links = load_links()
-                keyboard = [
+                links = load_links()
+        keyboard = [
             [InlineKeyboardButton(links["b1_t"], url=links["b1_u"])],
             [InlineKeyboardButton(links["b2_t"], url=links["b2_u"])]
         ]
