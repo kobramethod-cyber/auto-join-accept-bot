@@ -114,13 +114,14 @@ async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
       `drop_pending_updates=False` ensures that pending updates waiting in Telegram's 
       queue when the bot restarts are processed immediately.
     """
+    async def join_request(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         query = update.chat_join_request
         if not query:
             return
-            
+
         user = query.from_user
-                await query.approve()
+        await query.approve()
         add_user_to_db(user.id)
 
         links = load_links()
